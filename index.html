@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+
+  <meta
+    name="description"
+    content="ARKVOID — The next layer of technology is still unnamed."
+  />
+
+  <meta name="theme-color" content="#0b0c0c" />
+
+  <title>ARKVOID — The Next Layer</title>
+
+  <style>
+    /* =========================================================
+       ARKVOID
+       "THE NEXT LAYER"
+       Single-file / dependency-free
+       ========================================================= */
+
+    :root {
+      --black: #090a0a;
+      --surface: #0d0f0f;
+      --surface-2: #111313;
+
+      --white: #efeee8;
+      --muted: #8d908b;
+      --dim: #555955;
+
+      --line: rgba(239, 238, 232, 0.13);
+      --line-strong: rgba(239, 238, 232, 0.27);
+
+      --signal: #d9ff68;
+
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      width: 100%;
+      height: 100%;
+      background: var(--black);
+    }
+
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+
+      overflow: hidden;
+
+      background: var(--black);
+      color: var(--white);
+
+      font-family:
+        Inter,
+        ui-sans-serif,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    .page {
+      position: relative;
+
+      width: 100%;
+      height: 100svh;
+
+      min-height: 600px;
+
+      overflow: hidden;
+
+      background:
+        radial-gradient(
+          ellipse at 72% 48%,
+          rgba(100, 110, 101, 0.10),
+          transparent 38%
+        ),
+        radial-gradient(
+          ellipse at 18% 80%,
+          rgba(255, 255, 255, 0.025),
+          transparent 30%
+        ),
+        var(--black);
+    }
+
+
+    /* =========================================================
+       ATMOSPHERE
+       ========================================================= */
+
+    .atmosphere {
+      position: absolute;
+      inset: 0;
+
+      pointer-events: none;
+
+      opacity: 0.55;
+
+      background:
+        radial-gradient(
+          circle at 50% 50%,
+          transparent 0%,
+          rgba(0, 0, 0, 0.1) 45%,
+          rgba(0, 0, 0, 0.65) 100%
+        );
+    }
+
+
+    /* Fine film grain */
+    .grain {
+      position: absolute;
+      z-index: 50;
+
+      inset: -50%;
+
+      pointer-events: none;
+
+      opacity: 0.028;
+
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+      animation: grain 0.4s steps(2) infinite;
+    }
+
+    @keyframes grain {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      25% {
+        transform: translate(-2%, 1%);
+      }
+
+      50% {
+        transform: translate(1%, -2%);
+      }
+
+      75% {
+        transform: translate(2%, 2%);
+      }
+
+      100% {
+        transform: translate(-1%, -1%);
+      }
+    }
+
+
+    /* =========================================================
+       STRUCTURAL GRID
+       ========================================================= */
+
+    .grid {
+      position: absolute;
+      inset: 0;
+
+      pointer-events: none;
+
+      opacity: 0.18;
+
+      background-image:
+        linear-gradient(
+          90deg,
+          transparent 0,
+          transparent calc(50% - 0.5px),
+          var(--line) 50%,
+          transparent calc(50% + 0.5px)
+        ),
+        linear-gradient(
+          0deg,
+          transparent 0,
+          transparent calc(50% - 0.5px),
+          var(--line) 50%,
+          transparent calc(50% + 0.5px)
+        );
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .header {
+      position: absolute;
+      z-index: 30;
+
+      top: 0;
+      left: 0;
+      right: 0;
+
+      height: 92px;
+
+      padding:
+        0 clamp(24px, 4vw, 60px);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      font-size: 11px;
+      font-weight: 600;
+
+      letter-spacing: 0.42em;
+    }
+
+    .logo-mark {
+      position: relative;
+
+      width: 22px;
+      height: 22px;
+
+      border: 1px solid rgba(239, 238, 232, 0.8);
+
+      transform: rotate(45deg);
+    }
+
+    .logo-mark::before {
+      content: "";
+
+      position: absolute;
+
+      width: 1px;
+      height: 31px;
+
+      top: -5px;
+      left: 10px;
+
+      background: rgba(239, 238, 232, 0.8);
+    }
+
+    .logo-mark::after {
+      content: "";
+
+      position: absolute;
+
+      width: 31px;
+      height: 1px;
+
+      left: -5px;
+      top: 10px;
+
+      background: rgba(239, 238, 232, 0.8);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+
+      color: var(--muted);
+
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+      font-size: 8px;
+
+      letter-spacing: 0.18em;
+
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 5px;
+      height: 5px;
+
+      border-radius: 50%;
+
+      background: var(--signal);
+
+      box-shadow:
+        0 0 12px rgba(217, 255, 104, 0.5);
+
+      animation:
+        statusPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%,
+      100% {
+        opacity: 0.45;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .hero {
+      position: relative;
+      z-index: 5;
+
+      width: 100%;
+      height: 100%;
+
+      padding:
+        120px
+        clamp(24px, 7vw, 110px)
+        80px;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(330px, 0.8fr)
+        minmax(450px, 1.2fr);
+
+      align-items: center;
+    }
+
+
+    /* =========================================================
+       COPY
+       ========================================================= */
+
+    .copy {
+      position: relative;
+      z-index: 20;
+
+      max-width: 630px;
+
+      opacity: 0;
+
+      transform: translateY(24px);
+
+      animation:
+        copyReveal 1.2s var(--ease) 0.7s forwards;
+    }
+
+    @keyframes copyReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+
+      gap: 13px;
+
+      margin-bottom: 28px;
+
+      color: var(--muted);
+
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+      font-size: 9px;
+
+      letter-spacing: 0.22em;
+
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+
+      width: 28px;
+      height: 1px;
+
+      background: var(--signal);
+    }
+
+
+    /*
+      Deliberately not enormous.
+      The page should feel serious rather than like
+      a marketing hero screaming at the visitor.
+    */
+
+    h1 {
+      margin: 0;
+
+      max-width: 650px;
+
+      font-family:
+        Inter,
+        ui-sans-serif,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      font-size:
+        clamp(
+          48px,
+          5.5vw,
+          82px
+        );
+
+      font-weight: 430;
+
+      line-height: 0.98;
+
+      letter-spacing: -0.055em;
+    }
+
+    .line {
+      display: block;
+
+      overflow: hidden;
+
+      padding-bottom: 0.04em;
+    }
+
+    .line span {
+      display: inline-block;
+
+      transform: translateY(110%);
+
+      animation:
+        lineReveal 1.15s var(--ease) forwards;
+    }
+
+    .line:nth-child(1) span {
+      animation-delay: 0.8s;
+    }
+
+    .line:nth-child(2) span {
+      animation-delay: 0.9s;
+    }
+
+    .line:nth-child(3) span {
+      animation-delay: 1s;
+    }
+
+    @keyframes lineReveal {
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .highlight {
+      color: var(--white);
+
+      position: relative;
+    }
+
+    .highlight::after {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      right: 0;
+
+      bottom: -0.04em;
+
+      height: 1px;
+
+      background: var(--signal);
+
+      transform: scaleX(0);
+
+      transform-origin: left;
+
+      animation:
+        underline 1s var(--ease) 1.5s forwards;
+    }
+
+    @keyframes underline {
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+
+    /* =========================================================
+       SECONDARY STATEMENT
+       ========================================================= */
+
+    .statement {
+      display: flex;
+      align-items: flex-start;
+
+      gap: 16px;
+
+      margin-top: 46px;
+
+      max-width: 420px;
+
+      opacity: 0;
+
+      transform: translateY(14px);
+
+      animation:
+        statementReveal 1s var(--ease) 1.55s forwards;
+    }
+
+    @keyframes statementReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .statement-line {
+      width: 26px;
+      height: 1px;
+
+      flex: 0 0 auto;
+
+      margin-top: 8px;
+
+      background: var(--signal);
+    }
+
+    .statement p {
+      margin: 0;
+
+      color: #aaaDA7;
+
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+      font-size: 12px;
+
+      line-height: 1.7;
+
+      letter-spacing: -0.01em;
+    }
+
+
+    /* =========================================================
+       ARCHITECTURAL FIELD
+       ========================================================= */
+
+    .architecture {
+      position: absolute;
+
+      z-index: 4;
+
+      width: min(72vw, 980px);
+      height: min(72vw, 980px);
+
+      right: -2vw;
+      top: 50%;
+
+      transform:
+        translateY(-50%);
+
+      pointer-events: none;
+    }
+
+    .architecture-inner {
+      position: relative;
+
+      width: 100%;
+      height: 100%;
+
+      transform:
+        translate3d(
+          calc(var(--mx, 0px) * 0.35),
+          calc(var(--my, 0px) * 0.35),
+          0
+        );
+
+      transition:
+        transform 1.4s var(--ease);
+    }
+
+
+    /* =========================================================
+       CENTRAL CORE
+       ========================================================= */
+
+    .core {
+      position: absolute;
+
+      left: 50%;
+      top: 50%;
+
+      width: 31%;
+      height: 31%;
+
+      transform:
+        translate(-50%, -50%)
+        rotate(45deg);
+
+      border:
+
+        1px solid
+        rgba(239, 238, 232, 0.4);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,0.045),
+          rgba(255,255,255,0.005)
+        );
+
+      box-shadow:
+        inset 0 0 60px rgba(255,255,255,0.018),
+        0 0 90px rgba(217,255,104,0.025);
+
+      animation:
+        coreFloat 10s ease-in-out infinite;
+    }
+
+    @keyframes coreFloat {
+      0%,
+      100% {
+        transform:
+          translate(-50%, -50%)
+          rotate(45deg)
+          scale(1);
+      }
+
+      50% {
+        transform:
+          translate(-50%, -50%)
+          rotate(47deg)
+          scale(1.018);
+      }
+    }
+
+    .core::before {
+      content: "";
+
+      position: absolute;
+
+      inset: 14%;
+
+      border:
+        1px solid
+        rgba(239, 238, 232, 0.15);
+    }
+
+    .core::after {
+      content: "";
+
+      position: absolute;
+
+      width: 7px;
+      height: 7px;
+
+      right: 8%;
+      top: 8%;
+
+      background: var(--signal);
+
+      box-shadow:
+        0 0 18px rgba(217,255,104,0.45);
+    }
+
+
+    /* =========================================================
+       ARCHITECTURAL PLANES
+       ========================================================= */
+
+    .plane {
+      position: absolute;
+
+      border: 1px solid var(--line-strong);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(239,238,232,0.035),
+          transparent 70%
+        );
+
+      transform-style: preserve-3d;
+    }
+
+    .plane.one {
+      width: 58%;
+      height: 18%;
+
+      left: 21%;
+      top: 25%;
+
+      transform:
+        skewY(-16deg)
+        rotate(-4deg);
+
+      animation:
+        planeOne 9s ease-in-out infinite;
+    }
+
+    .plane.two {
+      width: 18%;
+      height: 58%;
+
+      left: 40%;
+      top: 21%;
+
+      transform:
+        skewX(-16deg)
+        rotate(4deg);
+
+      animation:
+        planeTwo 11s ease-in-out infinite;
+    }
+
+    .plane.three {
+      width: 62%;
+      height: 12%;
+
+      left: 19%;
+      top: 63%;
+
+      transform:
+        skewY(14deg)
+        rotate(3deg);
+
+      opacity: 0.55;
+
+      animation:
+        planeThree 13s ease-in-out infinite;
+    }
+
+    @keyframes planeOne {
+      0%,
+      100% {
+        transform:
+          skewY(-16deg)
+          rotate(-4deg)
+          translateY(0);
+      }
+
+      50% {
+        transform:
+          skewY(-16deg)
+          rotate(-3deg)
+          translateY(-10px);
+      }
+    }
+
+    @keyframes planeTwo {
+      0%,
+      100% {
+        transform:
+          skewX(-16deg)
+          rotate(4deg)
+          translateX(0);
+      }
+
+      50% {
+        transform:
+          skewX(-16deg)
+          rotate(5deg)
+          translateX(8px);
+      }
+    }
+
+    @keyframes planeThree {
+      0%,
+      100% {
+        transform:
+          skewY(14deg)
+          rotate(3deg)
+          translateY(0);
+      }
+
+      50% {
+        transform:
+          skewY(14deg)
+          rotate(2deg)
+          translateY(12px);
+      }
+    }
+
+
+    /* =========================================================
+       CONSTRUCTION LINES
+       ========================================================= */
+
+    .construction {
+      position: absolute;
+
+      left: 50%;
+      top: 50%;
+
+      width: 92%;
+      height: 92%;
+
+      transform:
+        translate(-50%, -50%);
+
+      opacity: 0.35;
+    }
+
+    .construction::before,
+    .construction::after {
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+      top: 0;
+
+      width: 1px;
+      height: 100%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          transparent,
+          var(--line-strong) 20%,
+          var(--line-strong) 80%,
+          transparent
+        );
+
+      transform:
+        translateX(-50%)
+        rotate(38deg);
+    }
+
+    .construction::after {
+      transform:
+        translateX(-50%)
+        rotate(-38deg);
+    }
+
+
+    /* =========================================================
+       HORIZONTAL SCAN
+       ========================================================= */
+
+    .scan {
+      position: absolute;
+
+      left: 4%;
+      right: 4%;
+
+      top: 50%;
+
+      height: 1px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(217,255,104,0.65),
+          transparent
+        );
+
+      opacity: 0;
+
+      animation:
+        scan 5s var(--ease) 1.4s infinite;
+    }
+
+    @keyframes scan {
+      0% {
+        top: 20%;
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.4;
+      }
+
+      50% {
+        opacity: 0.12;
+      }
+
+      90% {
+        opacity: 0.35;
+      }
+
+      100% {
+        top: 82%;
+        opacity: 0;
+      }
+    }
+
+
+    /* =========================================================
+       RINGS
+       ========================================================= */
+
+    .ring {
+      position: absolute;
+
+      left: 50%;
+      top: 50%;
+
+      border:
+        1px solid
+        rgba(239,238,232,0.12);
+
+      border-radius: 50%;
+
+      transform:
+        translate(-50%, -50%);
+    }
+
+    .ring.one {
+      width: 48%;
+      height: 48%;
+
+      animation:
+        ringPulse 8s ease-in-out infinite;
+    }
+
+    .ring.two {
+      width: 72%;
+      height: 72%;
+
+      opacity: 0.45;
+
+      animation:
+        ringPulse 11s ease-in-out -3s infinite;
+    }
+
+    .ring.three {
+      width: 91%;
+      height: 91%;
+
+      opacity: 0.25;
+
+      animation:
+        ringPulse 14s ease-in-out -6s infinite;
+    }
+
+    @keyframes ringPulse {
+      0%,
+      100% {
+        transform:
+          translate(-50%, -50%)
+          scale(1);
+      }
+
+      50% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.025);
+      }
+    }
+
+
+    /* =========================================================
+       COORDINATE LABELS
+       ========================================================= */
+
+    .coordinate {
+      position: absolute;
+
+      color: var(--dim);
+
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+      font-size: 7px;
+
+      letter-spacing: 0.15em;
+
+      text-transform: uppercase;
+    }
+
+    .coordinate.a {
+      top: 17%;
+      left: 7%;
+    }
+
+    .coordinate.b {
+      right: 5%;
+      bottom: 18%;
+    }
+
+    .coordinate.c {
+      left: 9%;
+      bottom: 24%;
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .footer {
+      position: absolute;
+
+      z-index: 30;
+
+      left: clamp(24px, 4vw, 60px);
+      right: clamp(24px, 4vw, 60px);
+
+      bottom:
+        calc(
+          24px +
+          env(safe-area-inset-bottom)
+        );
+
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      color: var(--dim);
+
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+      font-size: 8px;
+
+      letter-spacing: 0.15em;
+
+      text-transform: uppercase;
+
+      opacity: 0;
+
+      animation:
+        footerIn 1s var(--ease) 1.9s forwards;
+    }
+
+    @keyframes footerIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .footer-brand {
+      color: var(--white);
+
+      font-family:
+        Inter,
+        ui-sans-serif,
+        sans-serif;
+
+      font-size: 10px;
+
+      letter-spacing: 0.5em;
+
+      padding-left: 0.5em;
+    }
+
+
+    /* =========================================================
+       INTRO
+       ========================================================= */
+
+    .intro {
+      position: fixed;
+
+      z-index: 1000;
+
+      inset: 0;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      background: var(--black);
+
+      pointer-events: none;
+
+      animation:
+        introExit 1s var(--ease) 0.55s forwards;
+    }
+
+    .intro-inner {
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      color: var(--white);
+
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+      font-size: 9px;
+
+      letter-spacing: 0.35em;
+
+      text-transform: uppercase;
+    }
+
+    .intro-line {
+      width: 22px;
+      height: 1px;
+
+      background: var(--signal);
+
+      transform-origin: left;
+
+      animation:
+        introLine 1.2s var(--ease) infinite alternate;
+    }
+
+    @keyframes introLine {
+      from {
+        transform: scaleX(0.35);
+      }
+
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+    @keyframes introExit {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @media (max-width: 1000px) {
+
+      .hero {
+        grid-template-columns:
+          minmax(300px, 0.8fr)
+          minmax(350px, 1.2fr);
+
+        padding-left: 42px;
+        padding-right: 42px;
+      }
+
+      h1 {
+        font-size: clamp(44px, 6vw, 66px);
+      }
+
+      .architecture {
+        width: 70vw;
+        height: 70vw;
+      }
+
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 700px) {
+
+      .page {
+        min-height: 100svh;
+      }
+
+      .header {
+        height: 72px;
+
+        padding:
+          0 21px;
+      }
+
+      .logo {
+        font-size: 9px;
+        letter-spacing: 0.35em;
+      }
+
+      .logo-mark {
+        width: 19px;
+        height: 19px;
+      }
+
+      .logo-mark::before {
+        height: 27px;
+        left: 9px;
+        top: -5px;
+      }
+
+      .logo-mark::after {
+        width: 27px;
+        top: 9px;
+        left: -5px;
+      }
+
+      .status {
+        font-size: 7px;
+      }
+
+
+      /* -----------------------------------------
+         Hero
+         ----------------------------------------- */
+
+      .hero {
+        display: block;
+
+        padding:
+          92px 22px
+          calc(65px + env(safe-area-inset-bottom));
+      }
+
+
+      /* -----------------------------------------
+         Copy
+         ----------------------------------------- */
+
+      .copy {
+        position: relative;
+        z-index: 20;
+
+        max-width: 100%;
+
+        padding-top: 8vh;
+      }
+
+      .eyebrow {
+        margin-bottom: 22px;
+
+        font-size: 8px;
+
+        letter-spacing: 0.18em;
+      }
+
+      .eyebrow::before {
+        width: 21px;
+      }
+
+      h1 {
+        max-width: 100%;
+
+        font-size:
+          clamp(
+            42px,
+            11.7vw,
+            58px
+          );
+
+        line-height: 0.98;
+
+        letter-spacing: -0.055em;
+      }
+
+      .statement {
+        margin-top: 30px;
+
+        gap: 12px;
+
+        max-width: 310px;
+      }
+
+      .statement-line {
+        width: 20px;
+
+        margin-top: 7px;
+      }
+
+      .statement p {
+        font-size: 10px;
+
+        line-height: 1.7;
+      }
+
+
+      /* -----------------------------------------
+         Architecture
+         ----------------------------------------- */
+
+      .architecture {
+        z-index: 4;
+
+        width: 118vw;
+        height: 118vw;
+
+        top: auto;
+        right: -38vw;
+        bottom: -9vw;
+
+        transform: none;
+
+        opacity: 0.85;
+      }
+
+      .architecture-inner {
+        transform:
+          translate3d(
+            calc(var(--mx, 0px) * 0.15),
+            calc(var(--my, 0px) * 0.15),
+            0
+          );
+      }
+
+      .coordinate {
+        font-size: 6px;
+      }
+
+
+      /* -----------------------------------------
+         Footer
+         ----------------------------------------- */
+
+      .footer {
+        left: 21px;
+        right: 21px;
+
+        bottom:
+          calc(
+            18px +
+            env(safe-area-inset-bottom)
+          );
+
+        font-size: 7px;
+      }
+
+      .footer-brand {
+        font-size: 9px;
+      }
+
+    }
+
+
+    /* =========================================================
+       SMALL MOBILE
+       ========================================================= */
+
+    @media (
+      max-width: 380px
+    ) {
+
+      .copy {
+        padding-top: 5vh;
+      }
+
+      h1 {
+        font-size: 39px;
+      }
+
+      .statement {
+        margin-top: 24px;
+      }
+
+      .architecture {
+        width: 105vw;
+        height: 105vw;
+
+        right: -29vw;
+        bottom: -6vw;
+      }
+
+    }
+
+
+    /* =========================================================
+       SHORT MOBILE
+       ========================================================= */
+
+    @media (
+      max-width: 700px
+    ) and (
+      max-height: 700px
+    ) {
+
+      .copy {
+        padding-top: 2vh;
+      }
+
+      h1 {
+        font-size: 38px;
+      }
+
+      .statement {
+        margin-top: 20px;
+      }
+
+      .architecture {
+        width: 92vw;
+        height: 92vw;
+
+        right: -22vw;
+        bottom: -3vw;
+      }
+
+    }
+
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (
+      prefers-reduced-motion: reduce
+    ) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
+      }
+
+      .intro {
+        display: none;
+      }
+
+      .copy,
+      .footer {
+        opacity: 1;
+        transform: none;
+      }
+
+      .line span {
+        transform: none;
+      }
+
+      .highlight::after {
+        transform: scaleX(1);
+      }
+
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <!-- =======================================================
+       INTRO
+       ======================================================= -->
+
+  <div
+    class="intro"
+    aria-hidden="true"
+  >
+    <div class="intro-inner">
+      <span class="intro-line"></span>
+      <span>ARKVOID / INITIALIZING</span>
+    </div>
+  </div>
+
+
+  <!-- =======================================================
+       PAGE
+       ======================================================= -->
+
+  <main class="page">
+
+    <div class="atmosphere"></div>
+
+    <div
+      class="grid"
+      aria-hidden="true"
+    ></div>
+
+    <div
+      class="grain"
+      aria-hidden="true"
+    ></div>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="header">
+
+      <div class="logo">
+
+        <span
+          class="logo-mark"
+          aria-hidden="true"
+        ></span>
+
+        <span>ARKVOID</span>
+
+      </div>
+
+
+      <div class="status">
+
+        <span
+          class="status-dot"
+          aria-hidden="true"
+        ></span>
+
+        <span>Constructing</span>
+
+      </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         HERO COPY
+         ===================================================== -->
+
+    <section class="hero">
+
+      <div class="copy">
+
+        <div class="eyebrow">
+          Technology / AI / Beyond
+        </div>
+
+
+        <h1>
+
+          <span class="line">
+            <span>
+              The next
+            </span>
+          </span>
+
+          <span class="line">
+            <span>
+              layer of
+            </span>
+          </span>
+
+          <span class="line">
+            <span>
+              <span class="highlight">
+                technology
+              </span>
+              is still unnamed.
+            </span>
+          </span>
+
+        </h1>
+
+
+        <div class="statement">
+
+          <span
+            class="statement-line"
+            aria-hidden="true"
+          ></span>
+
+          <p>
+            So the work has begun to bring it into existence.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================
+           ARCHITECTURAL VISUAL
+           =================================================== -->
+
+      <div
+        class="architecture"
+        aria-hidden="true"
+      >
+
+        <div class="architecture-inner">
+
+
+          <!-- Construction geometry -->
+
+          <div class="construction"></div>
+
+
+          <!-- Large rings -->
+
+          <div class="ring one"></div>
+          <div class="ring two"></div>
+          <div class="ring three"></div>
+
+
+          <!-- Architectural planes -->
+
+          <div class="plane one"></div>
+          <div class="plane two"></div>
+          <div class="plane three"></div>
+
+
+          <!-- Central structure -->
+
+          <div class="core"></div>
+
+
+          <!-- Scanning light -->
+
+          <div class="scan"></div>
+
+
+          <!-- Technical coordinates -->
+
+          <span class="coordinate a">
+            AX / 001
+          </span>
+
+          <span class="coordinate b">
+            SYS / 04
+          </span>
+
+          <span class="coordinate c">
+            00.01 / FORMING
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="footer">
+
+      <span>
+        NEXT / UNKNOWN
+      </span>
+
+      <span class="footer-brand">
+        ARKVOID
+      </span>
+
+      <span>
+        2026
+      </span>
+
+    </footer>
+
+  </main>
+
+
+  <!-- =======================================================
+       INTERACTION
+       ======================================================= -->
+
+  <script>
+    (() => {
+
+      const architecture =
+        document.querySelector(
+          ".architecture-inner"
+        );
+
+      if (!architecture) return;
+
+
+      const desktop =
+        window.matchMedia(
+          "(min-width: 701px)"
+        );
+
+      const reduced =
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        );
+
+
+      if (
+        !desktop.matches ||
+        reduced.matches
+      ) {
+        return;
+      }
+
+
+      let targetX = 0;
+      let targetY = 0;
+
+      let currentX = 0;
+      let currentY = 0;
+
+      let animationFrame = null;
+
+
+      function render() {
+
+        currentX +=
+          (targetX - currentX) * 0.045;
+
+        currentY +=
+          (targetY - currentY) * 0.045;
+
+
+        architecture.style.setProperty(
+          "--mx",
+          `${currentX}px`
+        );
+
+        architecture.style.setProperty(
+          "--my",
+          `${currentY}px`
+        );
+
+
+        animationFrame =
+          requestAnimationFrame(
+            render
+          );
+      }
+
+
+      function pointerMove(event) {
+
+        const x =
+          event.clientX /
+          window.innerWidth -
+          0.5;
+
+        const y =
+          event.clientY /
+          window.innerHeight -
+          0.5;
+
+
+        targetX =
+          Math.max(
+            -18,
+            Math.min(
+              18,
+              x * 36
+            )
+          );
+
+        targetY =
+          Math.max(
+            -18,
+            Math.min(
+              18,
+              y * 36
+            )
+          );
+
+
+        if (!animationFrame) {
+          animationFrame =
+            requestAnimationFrame(
+              render
+            );
+        }
+      }
+
+
+      window.addEventListener(
+        "pointermove",
+        pointerMove,
+        {
+          passive: true
+        }
+      );
+
+
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+
+          if (
+            document.hidden
+          ) {
+
+            targetX = 0;
+            targetY = 0;
+
+          }
+
+        }
+      );
+
+    })();
+  </script>
+
+</body>
+</html>
