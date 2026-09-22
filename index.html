@@ -13,37 +13,52 @@
     content="ARKVOID — The next layer of technology is still unnamed."
   />
 
-  <meta name="theme-color" content="#0b0c0c" />
+  <meta name="theme-color" content="#e9e7df" />
+
+  <meta
+    name="robots"
+    content="index, follow"
+  />
 
   <title>ARKVOID — The Next Layer</title>
 
   <style>
     /* =========================================================
        ARKVOID
-       "THE NEXT LAYER"
-       Single-file / dependency-free
+       Editorial technology experience
+       No frameworks
+       No external assets
+       No dependencies
+       ========================================================= */
+
+
+    /* =========================================================
+       01. DESIGN TOKENS
        ========================================================= */
 
     :root {
-      --black: #090a0a;
-      --surface: #0d0f0f;
-      --surface-2: #111313;
+      --bg: #e9e7df;
+      --ink: #101217;
+      --soft-ink: #555750;
 
-      --white: #efeee8;
-      --muted: #8d908b;
-      --dim: #555955;
+      --red: #ef4038;
+      --teal: #087477;
+      --teal-dark: #07575b;
+      --lime: #b8dc58;
 
-      --line: rgba(239, 238, 232, 0.13);
-      --line-strong: rgba(239, 238, 232, 0.27);
+      --white: #f7f6f0;
 
-      --signal: #d9ff68;
+      --grid: rgba(16, 18, 23, 0.09);
 
-      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+      --page-padding: clamp(22px, 4vw, 64px);
     }
 
 
     /* =========================================================
-       RESET
+       02. RESET
        ========================================================= */
 
     *,
@@ -54,19 +69,18 @@
 
     html {
       width: 100%;
-      height: 100%;
-      background: var(--black);
+      min-height: 100%;
+      background: var(--bg);
+      scroll-behavior: smooth;
     }
 
     body {
       width: 100%;
-      height: 100%;
+      min-height: 100%;
       margin: 0;
 
-      overflow: hidden;
-
-      background: var(--black);
-      color: var(--white);
+      background: var(--bg);
+      color: var(--ink);
 
       font-family:
         Inter,
@@ -77,12 +91,26 @@
         sans-serif;
 
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
       text-rendering: optimizeLegibility;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
     }
 
 
     /* =========================================================
-       MAIN
+       03. PAGE
        ========================================================= */
 
     .page {
@@ -90,468 +118,270 @@
 
       width: 100%;
       height: 100svh;
-
-      min-height: 600px;
+      min-height: 640px;
 
       overflow: hidden;
 
+      isolation: isolate;
+
       background:
         radial-gradient(
-          ellipse at 72% 48%,
-          rgba(100, 110, 101, 0.10),
-          transparent 38%
+          circle at 72% 42%,
+          rgba(255, 255, 255, 0.72),
+          transparent 27%
         ),
-        radial-gradient(
-          ellipse at 18% 80%,
-          rgba(255, 255, 255, 0.025),
-          transparent 30%
-        ),
-        var(--black);
+        var(--bg);
     }
 
 
     /* =========================================================
-       ATMOSPHERE
+       04. FILM GRAIN
        ========================================================= */
 
-    .atmosphere {
+    .grain {
       position: absolute;
+      z-index: 100;
+
+      inset: -50%;
+
+      pointer-events: none;
+
+      opacity: 0.045;
+
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+
+      mix-blend-mode: multiply;
+
+      animation: grainMove 0.45s steps(2) infinite;
+    }
+
+    @keyframes grainMove {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+
+      25% {
+        transform: translate3d(-2%, 1%, 0);
+      }
+
+      50% {
+        transform: translate3d(1%, -2%, 0);
+      }
+
+      75% {
+        transform: translate3d(2%, 2%, 0);
+      }
+
+      100% {
+        transform: translate3d(-1%, -1%, 0);
+      }
+    }
+
+
+    /* =========================================================
+       05. EDITORIAL GRID
+       ========================================================= */
+
+    .grid {
+      position: absolute;
+      z-index: -5;
+
       inset: 0;
 
       pointer-events: none;
 
       opacity: 0.55;
 
-      background:
-        radial-gradient(
-          circle at 50% 50%,
-          transparent 0%,
-          rgba(0, 0, 0, 0.1) 45%,
-          rgba(0, 0, 0, 0.65) 100%
-        );
-    }
-
-
-    /* Fine film grain */
-    .grain {
-      position: absolute;
-      z-index: 50;
-
-      inset: -50%;
-
-      pointer-events: none;
-
-      opacity: 0.028;
-
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-
-      animation: grain 0.4s steps(2) infinite;
-    }
-
-    @keyframes grain {
-      0% {
-        transform: translate(0, 0);
-      }
-
-      25% {
-        transform: translate(-2%, 1%);
-      }
-
-      50% {
-        transform: translate(1%, -2%);
-      }
-
-      75% {
-        transform: translate(2%, 2%);
-      }
-
-      100% {
-        transform: translate(-1%, -1%);
-      }
-    }
-
-
-    /* =========================================================
-       STRUCTURAL GRID
-       ========================================================= */
-
-    .grid {
-      position: absolute;
-      inset: 0;
-
-      pointer-events: none;
-
-      opacity: 0.18;
-
       background-image:
         linear-gradient(
           90deg,
           transparent 0,
-          transparent calc(50% - 0.5px),
-          var(--line) 50%,
-          transparent calc(50% + 0.5px)
+          transparent calc(25% - 1px),
+          var(--grid) 25%,
+          transparent calc(25% + 1px)
         ),
         linear-gradient(
-          0deg,
+          90deg,
           transparent 0,
-          transparent calc(50% - 0.5px),
-          var(--line) 50%,
-          transparent calc(50% + 0.5px)
+          transparent calc(50% - 1px),
+          var(--grid) 50%,
+          transparent calc(50% + 1px)
+        ),
+        linear-gradient(
+          90deg,
+          transparent 0,
+          transparent calc(75% - 1px),
+          var(--grid) 75%,
+          transparent calc(75% + 1px)
+        );
+
+      mask-image:
+        linear-gradient(
+          to bottom,
+          transparent,
+          black 12%,
+          black 88%,
+          transparent
         );
     }
 
 
     /* =========================================================
-       HEADER
+       06. TOP BRAND
        ========================================================= */
 
-    .header {
+    .top {
       position: absolute;
-      z-index: 30;
+      z-index: 40;
 
       top: 0;
       left: 0;
-      right: 0;
 
-      height: 92px;
+      width: 100%;
 
       padding:
-        0 clamp(24px, 4vw, 60px);
+        26px
+        var(--page-padding);
 
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      pointer-events: none;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 11px;
 
-      font-size: 11px;
-      font-weight: 600;
+      color: var(--ink);
 
-      letter-spacing: 0.42em;
+      font-size: 12px;
+      font-weight: 700;
+
+      letter-spacing: 0.32em;
     }
 
-    .logo-mark {
+    .logo-symbol {
       position: relative;
 
-      width: 22px;
-      height: 22px;
+      width: 25px;
+      height: 25px;
 
-      border: 1px solid rgba(239, 238, 232, 0.8);
+      border: 1.4px solid var(--ink);
+
+      border-radius: 50%;
 
       transform: rotate(45deg);
     }
 
-    .logo-mark::before {
+    .logo-symbol::before,
+    .logo-symbol::after {
       content: "";
 
       position: absolute;
 
+      background: var(--ink);
+    }
+
+    .logo-symbol::before {
       width: 1px;
       height: 31px;
 
-      top: -5px;
-      left: 10px;
-
-      background: rgba(239, 238, 232, 0.8);
+      left: 11px;
+      top: -4px;
     }
 
-    .logo-mark::after {
-      content: "";
-
-      position: absolute;
-
+    .logo-symbol::after {
       width: 31px;
       height: 1px;
 
-      left: -5px;
-      top: 10px;
-
-      background: rgba(239, 238, 232, 0.8);
+      left: -4px;
+      top: 11px;
     }
 
-    .status {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-
-      color: var(--muted);
-
-      font-family:
-        ui-monospace,
-        SFMono-Regular,
-        Menlo,
-        monospace;
-
-      font-size: 8px;
-
-      letter-spacing: 0.18em;
-
-      text-transform: uppercase;
-    }
-
-    .status-dot {
-      width: 5px;
-      height: 5px;
+    .top-mark {
+      width: 10px;
+      height: 10px;
 
       border-radius: 50%;
 
-      background: var(--signal);
+      background: var(--red);
 
       box-shadow:
-        0 0 12px rgba(217, 255, 104, 0.5);
-
-      animation:
-        statusPulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes statusPulse {
-      0%,
-      100% {
-        opacity: 0.45;
-      }
-
-      50% {
-        opacity: 1;
-      }
+        0 0 0 5px rgba(239, 64, 56, 0.08);
     }
 
 
     /* =========================================================
-       HERO
+       07. MAIN LAYOUT
        ========================================================= */
 
     .hero {
       position: relative;
       z-index: 5;
 
-      width: 100%;
+      width: min(1500px, 100%);
       height: 100%;
 
+      margin: 0 auto;
+
       padding:
-        120px
-        clamp(24px, 7vw, 110px)
-        80px;
+        clamp(105px, 12vh, 145px)
+        var(--page-padding)
+        clamp(60px, 7vh, 90px);
 
       display: grid;
 
       grid-template-columns:
-        minmax(330px, 0.8fr)
-        minmax(450px, 1.2fr);
+        minmax(0, 0.94fr)
+        minmax(390px, 1.06fr);
 
       align-items: center;
+
+      gap: clamp(30px, 6vw, 120px);
     }
 
 
     /* =========================================================
-       COPY
+       08. COPY
        ========================================================= */
 
     .copy {
       position: relative;
       z-index: 20;
 
-      max-width: 630px;
+      max-width: 720px;
 
       opacity: 0;
 
-      transform: translateY(24px);
+      transform: translateY(26px);
 
       animation:
-        copyReveal 1.2s var(--ease) 0.7s forwards;
+        copyIn 1.15s var(--ease-out) 0.45s forwards;
     }
 
-    @keyframes copyReveal {
+    @keyframes copyIn {
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
-    .eyebrow {
+
+    /* Small red editorial marker */
+
+    .marker {
       display: flex;
       align-items: center;
 
-      gap: 13px;
+      gap: 10px;
 
       margin-bottom: 28px;
 
-      color: var(--muted);
-
-      font-family:
-        ui-monospace,
-        SFMono-Regular,
-        Menlo,
-        monospace;
-
-      font-size: 9px;
-
-      letter-spacing: 0.22em;
-
-      text-transform: uppercase;
-    }
-
-    .eyebrow::before {
-      content: "";
-
-      width: 28px;
-      height: 1px;
-
-      background: var(--signal);
-    }
-
-
-    /*
-      Deliberately not enormous.
-      The page should feel serious rather than like
-      a marketing hero screaming at the visitor.
-    */
-
-    h1 {
-      margin: 0;
-
-      max-width: 650px;
-
-      font-family:
-        Inter,
-        ui-sans-serif,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
-      font-size:
-        clamp(
-          48px,
-          5.5vw,
-          82px
-        );
-
-      font-weight: 430;
-
-      line-height: 0.98;
-
-      letter-spacing: -0.055em;
-    }
-
-    .line {
-      display: block;
-
-      overflow: hidden;
-
-      padding-bottom: 0.04em;
-    }
-
-    .line span {
-      display: inline-block;
-
-      transform: translateY(110%);
-
-      animation:
-        lineReveal 1.15s var(--ease) forwards;
-    }
-
-    .line:nth-child(1) span {
-      animation-delay: 0.8s;
-    }
-
-    .line:nth-child(2) span {
-      animation-delay: 0.9s;
-    }
-
-    .line:nth-child(3) span {
-      animation-delay: 1s;
-    }
-
-    @keyframes lineReveal {
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    .highlight {
-      color: var(--white);
-
-      position: relative;
-    }
-
-    .highlight::after {
-      content: "";
-
-      position: absolute;
-
-      left: 0;
-      right: 0;
-
-      bottom: -0.04em;
-
-      height: 1px;
-
-      background: var(--signal);
-
-      transform: scaleX(0);
-
-      transform-origin: left;
-
-      animation:
-        underline 1s var(--ease) 1.5s forwards;
-    }
-
-    @keyframes underline {
-      to {
-        transform: scaleX(1);
-      }
-    }
-
-
-    /* =========================================================
-       SECONDARY STATEMENT
-       ========================================================= */
-
-    .statement {
-      display: flex;
-      align-items: flex-start;
-
-      gap: 16px;
-
-      margin-top: 46px;
-
-      max-width: 420px;
-
-      opacity: 0;
-
-      transform: translateY(14px);
-
-      animation:
-        statementReveal 1s var(--ease) 1.55s forwards;
-    }
-
-    @keyframes statementReveal {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .statement-line {
-      width: 26px;
-      height: 1px;
-
-      flex: 0 0 auto;
-
-      margin-top: 8px;
-
-      background: var(--signal);
-    }
-
-    .statement p {
-      margin: 0;
-
-      color: #aaaDA7;
+      color: var(--soft-ink);
 
       font-family:
         ui-monospace,
@@ -561,520 +391,710 @@
         Consolas,
         monospace;
 
-      font-size: 12px;
+      font-size: 9px;
 
-      line-height: 1.7;
+      letter-spacing: 0.18em;
 
-      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+
+    .marker-line {
+      width: 32px;
+      height: 2px;
+
+      background: var(--red);
     }
 
 
     /* =========================================================
-       ARCHITECTURAL FIELD
+       09. MAIN HEADLINE
        ========================================================= */
 
-    .architecture {
-      position: absolute;
+    h1 {
+      margin: 0;
 
-      z-index: 4;
+      color: var(--ink);
 
-      width: min(72vw, 980px);
-      height: min(72vw, 980px);
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
 
-      right: -2vw;
-      top: 50%;
+      font-size:
+        clamp(
+          48px,
+          6.4vw,
+          96px
+        );
 
-      transform:
-        translateY(-50%);
+      font-weight: 400;
 
-      pointer-events: none;
+      line-height: 0.91;
+
+      letter-spacing: -0.065em;
     }
 
-    .architecture-inner {
+    .headline-line {
+      display: block;
+
+      overflow: hidden;
+
+      padding-bottom: 0.035em;
+    }
+
+    .headline-inner {
+      display: inline-block;
+
+      transform: translateY(115%);
+
+      animation:
+        headlineIn 1.25s var(--ease-out) forwards;
+    }
+
+    .headline-line:nth-child(1)
+    .headline-inner {
+      animation-delay: 0.48s;
+    }
+
+    .headline-line:nth-child(2)
+    .headline-inner {
+      animation-delay: 0.57s;
+    }
+
+    .headline-line:nth-child(3)
+    .headline-inner {
+      animation-delay: 0.66s;
+    }
+
+    @keyframes headlineIn {
+      to {
+        transform: translateY(0);
+      }
+    }
+
+
+    /* Accent underline */
+
+    .accent {
+      position: relative;
+      display: inline-block;
+    }
+
+    .accent::after {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      right: 0.06em;
+
+      bottom: -0.03em;
+
+      height: clamp(3px, 0.35vw, 6px);
+
+      background: var(--red);
+
+      transform: scaleX(0);
+
+      transform-origin: left center;
+
+      animation:
+        accentIn 0.9s var(--ease-out) 1.12s forwards;
+    }
+
+    @keyframes accentIn {
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+
+    /* =========================================================
+       10. SECONDARY COPY
+       ========================================================= */
+
+    .subcopy {
+      display: grid;
+
+      grid-template-columns: 38px minmax(0, 430px);
+
+      gap: 15px;
+
+      align-items: start;
+
+      margin-top: clamp(34px, 5vh, 58px);
+      margin-left: 3px;
+
+      opacity: 0;
+
+      transform: translateY(14px);
+
+      animation:
+        subcopyIn 1s var(--ease-out) 1.2s forwards;
+    }
+
+    @keyframes subcopyIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .subcopy-line {
+      width: 30px;
+      height: 1px;
+
+      margin-top: 9px;
+
+      background: var(--red);
+    }
+
+    .subcopy p {
+      margin: 0;
+
+      color: #353731;
+
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+      font-size:
+        clamp(11px, 1vw, 14px);
+
+      line-height: 1.7;
+
+      letter-spacing: -0.015em;
+    }
+
+
+    /* =========================================================
+       11. VISUAL FIELD
+       ========================================================= */
+
+    .visual {
       position: relative;
 
       width: 100%;
-      height: 100%;
+      height: min(72vh, 690px);
+
+      min-height: 450px;
+
+      display: grid;
+      place-items: center;
+
+      opacity: 0;
+
+      transform: scale(0.94);
+
+      animation:
+        visualIn 1.5s var(--ease-out) 0.2s forwards;
+    }
+
+    @keyframes visualIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+
+    .visual-stage {
+      position: relative;
+
+      width: min(100%, 690px);
+      aspect-ratio: 1;
 
       transform:
         translate3d(
-          calc(var(--mx, 0px) * 0.35),
-          calc(var(--my, 0px) * 0.35),
+          calc(var(--pointer-x, 0) * 1px),
+          calc(var(--pointer-y, 0) * 1px),
           0
         );
 
       transition:
-        transform 1.4s var(--ease);
-    }
-
-
-    /* =========================================================
-       CENTRAL CORE
-       ========================================================= */
-
-    .core {
-      position: absolute;
-
-      left: 50%;
-      top: 50%;
-
-      width: 31%;
-      height: 31%;
-
-      transform:
-        translate(-50%, -50%)
-        rotate(45deg);
-
-      border:
-
-        1px solid
-        rgba(239, 238, 232, 0.4);
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(255,255,255,0.045),
-          rgba(255,255,255,0.005)
-        );
-
-      box-shadow:
-        inset 0 0 60px rgba(255,255,255,0.018),
-        0 0 90px rgba(217,255,104,0.025);
-
-      animation:
-        coreFloat 10s ease-in-out infinite;
-    }
-
-    @keyframes coreFloat {
-      0%,
-      100% {
-        transform:
-          translate(-50%, -50%)
-          rotate(45deg)
-          scale(1);
-      }
-
-      50% {
-        transform:
-          translate(-50%, -50%)
-          rotate(47deg)
-          scale(1.018);
-      }
-    }
-
-    .core::before {
-      content: "";
-
-      position: absolute;
-
-      inset: 14%;
-
-      border:
-        1px solid
-        rgba(239, 238, 232, 0.15);
-    }
-
-    .core::after {
-      content: "";
-
-      position: absolute;
-
-      width: 7px;
-      height: 7px;
-
-      right: 8%;
-      top: 8%;
-
-      background: var(--signal);
-
-      box-shadow:
-        0 0 18px rgba(217,255,104,0.45);
-    }
-
-
-    /* =========================================================
-       ARCHITECTURAL PLANES
-       ========================================================= */
-
-    .plane {
-      position: absolute;
-
-      border: 1px solid var(--line-strong);
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(239,238,232,0.035),
-          transparent 70%
-        );
+        transform 1.2s var(--ease-out);
 
       transform-style: preserve-3d;
     }
 
-    .plane.one {
-      width: 58%;
-      height: 18%;
-
-      left: 21%;
-      top: 25%;
-
-      transform:
-        skewY(-16deg)
-        rotate(-4deg);
-
-      animation:
-        planeOne 9s ease-in-out infinite;
-    }
-
-    .plane.two {
-      width: 18%;
-      height: 58%;
-
-      left: 40%;
-      top: 21%;
-
-      transform:
-        skewX(-16deg)
-        rotate(4deg);
-
-      animation:
-        planeTwo 11s ease-in-out infinite;
-    }
-
-    .plane.three {
-      width: 62%;
-      height: 12%;
-
-      left: 19%;
-      top: 63%;
-
-      transform:
-        skewY(14deg)
-        rotate(3deg);
-
-      opacity: 0.55;
-
-      animation:
-        planeThree 13s ease-in-out infinite;
-    }
-
-    @keyframes planeOne {
-      0%,
-      100% {
-        transform:
-          skewY(-16deg)
-          rotate(-4deg)
-          translateY(0);
-      }
-
-      50% {
-        transform:
-          skewY(-16deg)
-          rotate(-3deg)
-          translateY(-10px);
-      }
-    }
-
-    @keyframes planeTwo {
-      0%,
-      100% {
-        transform:
-          skewX(-16deg)
-          rotate(4deg)
-          translateX(0);
-      }
-
-      50% {
-        transform:
-          skewX(-16deg)
-          rotate(5deg)
-          translateX(8px);
-      }
-    }
-
-    @keyframes planeThree {
-      0%,
-      100% {
-        transform:
-          skewY(14deg)
-          rotate(3deg)
-          translateY(0);
-      }
-
-      50% {
-        transform:
-          skewY(14deg)
-          rotate(2deg)
-          translateY(12px);
-      }
-    }
-
 
     /* =========================================================
-       CONSTRUCTION LINES
+       12. MAIN ABSTRACT MATERIAL
        ========================================================= */
 
-    .construction {
+    .material {
       position: absolute;
 
-      left: 50%;
-      top: 50%;
+      width: 70%;
+      height: 70%;
 
-      width: 92%;
-      height: 92%;
+      left: 15%;
+      top: 15%;
 
-      transform:
-        translate(-50%, -50%);
-
-      opacity: 0.35;
-    }
-
-    .construction::before,
-    .construction::after {
-      content: "";
-
-      position: absolute;
-
-      left: 50%;
-      top: 0;
-
-      width: 1px;
-      height: 100%;
+      overflow: hidden;
 
       background:
         linear-gradient(
-          to bottom,
-          transparent,
-          var(--line-strong) 20%,
-          var(--line-strong) 80%,
-          transparent
+          135deg,
+          #118689 0%,
+          #087376 48%,
+          #07595c 100%
         );
 
-      transform:
-        translateX(-50%)
-        rotate(38deg);
-    }
-
-    .construction::after {
-      transform:
-        translateX(-50%)
-        rotate(-38deg);
-    }
-
-
-    /* =========================================================
-       HORIZONTAL SCAN
-       ========================================================= */
-
-    .scan {
-      position: absolute;
-
-      left: 4%;
-      right: 4%;
-
-      top: 50%;
-
-      height: 1px;
-
-      background:
-        linear-gradient(
-          90deg,
-          transparent,
-          rgba(217,255,104,0.65),
-          transparent
-        );
-
-      opacity: 0;
-
-      animation:
-        scan 5s var(--ease) 1.4s infinite;
-    }
-
-    @keyframes scan {
-      0% {
-        top: 20%;
-        opacity: 0;
-      }
-
-      10% {
-        opacity: 0.4;
-      }
-
-      50% {
-        opacity: 0.12;
-      }
-
-      90% {
-        opacity: 0.35;
-      }
-
-      100% {
-        top: 82%;
-        opacity: 0;
-      }
-    }
-
-
-    /* =========================================================
-       RINGS
-       ========================================================= */
-
-    .ring {
-      position: absolute;
-
-      left: 50%;
-      top: 50%;
-
-      border:
-        1px solid
-        rgba(239,238,232,0.12);
-
-      border-radius: 50%;
+      border-radius:
+        48% 52% 58% 42%
+        /
+        40% 34% 66% 60%;
 
       transform:
-        translate(-50%, -50%);
-    }
+        rotate(-7deg)
+        translateZ(0);
 
-    .ring.one {
-      width: 48%;
-      height: 48%;
-
-      animation:
-        ringPulse 8s ease-in-out infinite;
-    }
-
-    .ring.two {
-      width: 72%;
-      height: 72%;
-
-      opacity: 0.45;
+      box-shadow:
+        25px 35px 0 rgba(16, 18, 23, 0.09);
 
       animation:
-        ringPulse 11s ease-in-out -3s infinite;
+        materialFloat 10s ease-in-out infinite;
     }
 
-    .ring.three {
-      width: 91%;
-      height: 91%;
-
-      opacity: 0.25;
-
-      animation:
-        ringPulse 14s ease-in-out -6s infinite;
-    }
-
-    @keyframes ringPulse {
+    @keyframes materialFloat {
       0%,
       100% {
         transform:
-          translate(-50%, -50%)
+          rotate(-7deg)
           scale(1);
       }
 
       50% {
         transform:
-          translate(-50%, -50%)
+          rotate(-4deg)
           scale(1.025);
       }
     }
 
 
     /* =========================================================
-       COORDINATE LABELS
+       13. TOPOGRAPHIC LINES
        ========================================================= */
 
-    .coordinate {
+    .topography {
       position: absolute;
 
-      color: var(--dim);
+      inset: -25%;
 
-      font-family:
-        ui-monospace,
-        SFMono-Regular,
-        Menlo,
-        monospace;
+      opacity: 0.44;
 
-      font-size: 7px;
+      transform:
+        rotate(17deg)
+        scale(1.15);
 
-      letter-spacing: 0.15em;
+      background:
+        repeating-radial-gradient(
+          ellipse at 50% 50%,
+          transparent 0 22px,
+          rgba(247, 246, 240, 0.85) 23px 24px,
+          transparent 25px 46px
+        );
 
-      text-transform: uppercase;
+      animation:
+        topologyMove 22s ease-in-out infinite;
     }
 
-    .coordinate.a {
-      top: 17%;
-      left: 7%;
-    }
+    @keyframes topologyMove {
+      0%,
+      100% {
+        transform:
+          rotate(17deg)
+          scale(1.15)
+          translate3d(0, 0, 0);
+      }
 
-    .coordinate.b {
-      right: 5%;
-      bottom: 18%;
-    }
-
-    .coordinate.c {
-      left: 9%;
-      bottom: 24%;
+      50% {
+        transform:
+          rotate(20deg)
+          scale(1.15)
+          translate3d(2%, -2%, 0);
+      }
     }
 
 
     /* =========================================================
-       FOOTER
+       14. INTERNAL MATERIAL
        ========================================================= */
 
-    .footer {
+    .material-light {
+      position: absolute;
+
+      width: 23%;
+      height: 120%;
+
+      right: 17%;
+      top: -10%;
+
+      background: var(--lime);
+
+      opacity: 0.88;
+
+      border-radius: 100px;
+
+      transform: rotate(19deg);
+
+      filter: blur(0.2px);
+
+      animation:
+        lightFloat 8s ease-in-out infinite;
+    }
+
+    @keyframes lightFloat {
+      0%,
+      100% {
+        transform: rotate(19deg) translateY(0);
+      }
+
+      50% {
+        transform: rotate(22deg) translateY(-3%);
+      }
+    }
+
+
+    /* =========================================================
+       15. RED STRUCTURAL PIECE
+       ========================================================= */
+
+    .red-form {
+      position: absolute;
+
+      z-index: 10;
+
+      left: -1%;
+      bottom: 13%;
+
+      width: 42%;
+      height: 36%;
+
+      background: var(--red);
+
+      clip-path:
+        polygon(
+          0 13%,
+          78% 0,
+          100% 45%,
+          76% 100%,
+          0 86%
+        );
+
+      transform:
+        rotate(7deg)
+        translateZ(40px);
+
+      animation:
+        redFloat 8s ease-in-out infinite;
+    }
+
+    @keyframes redFloat {
+      0%,
+      100% {
+        transform:
+          rotate(7deg)
+          translate3d(0, 0, 40px);
+      }
+
+      50% {
+        transform:
+          rotate(4deg)
+          translate3d(9px, -12px, 40px);
+      }
+    }
+
+
+    /* =========================================================
+       16. WHITE VOID / CUTOUT
+       ========================================================= */
+
+    .void {
+      position: absolute;
+
+      z-index: 15;
+
+      width: 27%;
+      height: 27%;
+
+      right: 7%;
+      top: 9%;
+
+      border-radius: 50%;
+
+      background: var(--bg);
+
+      box-shadow:
+        0 0 0 1px rgba(16, 18, 23, 0.12);
+
+      transform:
+        translateZ(60px);
+
+      animation:
+        voidFloat 7s ease-in-out infinite;
+    }
+
+    @keyframes voidFloat {
+      0%,
+      100% {
+        transform:
+          translate3d(0, 0, 60px);
+      }
+
+      50% {
+        transform:
+          translate3d(-8px, 8px, 60px);
+      }
+    }
+
+    .void::before,
+    .void::after {
+      content: "";
+
+      position: absolute;
+
+      border-radius: 50%;
+
+      border: 1px solid var(--ink);
+    }
+
+    .void::before {
+      inset: 17%;
+
+      opacity: 0.45;
+    }
+
+    .void::after {
+      inset: 34%;
+
+      border-width: 1.5px;
+
+      opacity: 0.7;
+    }
+
+
+    /* =========================================================
+       17. ORBITAL LINE SYSTEM
+       ========================================================= */
+
+    .orbit {
+      position: absolute;
+
+      z-index: 20;
+
+      width: 94%;
+      height: 33%;
+
+      left: 3%;
+      top: 33%;
+
+      border: 1px solid rgba(16, 18, 23, 0.38);
+
+      border-radius: 50%;
+
+      transform:
+        rotate(-22deg)
+        translateZ(80px);
+
+      pointer-events: none;
+
+      animation:
+        orbitFloat 11s ease-in-out infinite;
+    }
+
+    .orbit--second {
+      width: 102%;
+      height: 25%;
+
+      left: -1%;
+      top: 37%;
+
+      opacity: 0.46;
+
+      transform:
+        rotate(25deg)
+        translateZ(65px);
+
+      animation-delay: -4s;
+    }
+
+    @keyframes orbitFloat {
+      0%,
+      100% {
+        transform:
+          rotate(-22deg)
+          translate3d(0, 0, 80px);
+      }
+
+      50% {
+        transform:
+          rotate(-18deg)
+          translate3d(5px, -5px, 80px);
+      }
+    }
+
+
+    /* =========================================================
+       18. TECHNICAL MARKS
+       ========================================================= */
+
+    .crosshair {
       position: absolute;
 
       z-index: 30;
 
-      left: clamp(24px, 4vw, 60px);
-      right: clamp(24px, 4vw, 60px);
+      width: 48px;
+      height: 48px;
 
-      bottom:
-        calc(
-          24px +
-          env(safe-area-inset-bottom)
-        );
+      right: 1%;
+      top: 2%;
+
+      opacity: 0.72;
+
+      animation:
+        crosshairFloat 9s ease-in-out infinite;
+    }
+
+    .crosshair::before,
+    .crosshair::after {
+      content: "";
+
+      position: absolute;
+
+      background: var(--ink);
+    }
+
+    .crosshair::before {
+      width: 1px;
+      height: 100%;
+
+      left: 50%;
+      top: 0;
+    }
+
+    .crosshair::after {
+      width: 100%;
+      height: 1px;
+
+      left: 0;
+      top: 50%;
+    }
+
+    .crosshair-ring {
+      position: absolute;
+
+      inset: 9px;
+
+      border: 1px solid var(--ink);
+
+      border-radius: 50%;
+    }
+
+    @keyframes crosshairFloat {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+
+    /* =========================================================
+       19. LIME NODE
+       ========================================================= */
+
+    .node {
+      position: absolute;
+
+      z-index: 40;
+
+      right: 11%;
+      bottom: 17%;
+
+      width: 13px;
+      height: 13px;
+
+      border-radius: 50%;
+
+      background: var(--lime);
+
+      box-shadow:
+        0 0 0 6px rgba(184, 220, 88, 0.12);
+
+      animation:
+        nodePulse 3.5s ease-in-out infinite;
+    }
+
+    @keyframes nodePulse {
+      0%,
+      100% {
+        transform: scale(1);
+
+        box-shadow:
+          0 0 0 5px rgba(184, 220, 88, 0.12);
+      }
+
+      50% {
+        transform: scale(1.2);
+
+        box-shadow:
+          0 0 0 11px rgba(184, 220, 88, 0.035);
+      }
+    }
+
+
+    /* =========================================================
+       20. BOTTOM SIGNATURE
+       ========================================================= */
+
+    .bottom {
+      position: absolute;
+
+      z-index: 40;
+
+      left: var(--page-padding);
+      right: var(--page-padding);
+
+      bottom: 28px;
 
       display: flex;
-
-      justify-content: space-between;
       align-items: center;
-
-      color: var(--dim);
-
-      font-family:
-        ui-monospace,
-        SFMono-Regular,
-        Menlo,
-        monospace;
-
-      font-size: 8px;
-
-      letter-spacing: 0.15em;
-
-      text-transform: uppercase;
+      justify-content: space-between;
 
       opacity: 0;
 
       animation:
-        footerIn 1s var(--ease) 1.9s forwards;
+        bottomIn 1s var(--ease-out) 1.45s forwards;
     }
 
-    @keyframes footerIn {
+    @keyframes bottomIn {
       to {
         opacity: 1;
       }
     }
 
-    .footer-brand {
-      color: var(--white);
+    .bottom-rule {
+      width: 26px;
+      height: 1px;
 
-      font-family:
-        Inter,
-        ui-sans-serif,
-        sans-serif;
+      background: var(--ink);
 
-      font-size: 10px;
+      opacity: 0.4;
+    }
+
+    .wordmark {
+      font-size: 11px;
+
+      font-weight: 600;
 
       letter-spacing: 0.5em;
 
@@ -1083,71 +1103,58 @@
 
 
     /* =========================================================
-       INTRO
+       21. INTRODUCTION
        ========================================================= */
 
     .intro {
       position: fixed;
 
-      z-index: 1000;
+      z-index: 200;
 
       inset: 0;
 
-      display: flex;
+      display: grid;
+      place-items: center;
 
-      align-items: center;
-      justify-content: center;
-
-      background: var(--black);
+      background: var(--bg);
 
       pointer-events: none;
 
       animation:
-        introExit 1s var(--ease) 0.55s forwards;
+        introExit 0.85s var(--ease-out) 0.45s forwards;
     }
 
-    .intro-inner {
+    .intro-content {
       display: flex;
-
       align-items: center;
 
-      gap: 12px;
-
-      color: var(--white);
+      gap: 11px;
 
       font-family:
         ui-monospace,
         SFMono-Regular,
         Menlo,
+        Monaco,
+        Consolas,
         monospace;
 
-      font-size: 9px;
+      font-size: 10px;
 
-      letter-spacing: 0.35em;
+      letter-spacing: 0.28em;
 
       text-transform: uppercase;
     }
 
-    .intro-line {
-      width: 22px;
-      height: 1px;
+    .intro-dot {
+      width: 5px;
+      height: 5px;
 
-      background: var(--signal);
+      border-radius: 50%;
 
-      transform-origin: left;
+      background: var(--red);
 
       animation:
-        introLine 1.2s var(--ease) infinite alternate;
-    }
-
-    @keyframes introLine {
-      from {
-        transform: scaleX(0.35);
-      }
-
-      to {
-        transform: scaleX(1);
-      }
+        introPulse 0.9s ease-in-out infinite;
     }
 
     @keyframes introExit {
@@ -1157,275 +1164,359 @@
       }
     }
 
+    @keyframes introPulse {
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.4;
+      }
+
+      50% {
+        transform: scale(1.8);
+        opacity: 1;
+      }
+    }
+
 
     /* =========================================================
-       TABLET
+       22. DESKTOP POINTER DEPTH
        ========================================================= */
 
-    @media (max-width: 1000px) {
+    @media (min-width: 901px) {
 
-      .hero {
-        grid-template-columns:
-          minmax(300px, 0.8fr)
-          minmax(350px, 1.2fr);
-
-        padding-left: 42px;
-        padding-right: 42px;
-      }
-
-      h1 {
-        font-size: clamp(44px, 6vw, 66px);
-      }
-
-      .architecture {
-        width: 70vw;
-        height: 70vw;
+      .visual-stage {
+        --pointer-x: 0;
+        --pointer-y: 0;
       }
 
     }
 
 
     /* =========================================================
-       MOBILE
+       23. TABLET
+       ========================================================= */
+
+    @media (max-width: 1050px) {
+
+      .hero {
+        grid-template-columns:
+          minmax(0, 0.95fr)
+          minmax(320px, 1.05fr);
+
+        gap: 30px;
+      }
+
+      h1 {
+        font-size: clamp(46px, 7vw, 74px);
+      }
+
+      .visual {
+        min-height: 390px;
+      }
+
+    }
+
+
+    /* =========================================================
+       24. MOBILE
        ========================================================= */
 
     @media (max-width: 700px) {
+
+      body {
+        overflow: hidden;
+      }
 
       .page {
         min-height: 100svh;
       }
 
-      .header {
-        height: 72px;
-
+      .top {
         padding:
-          0 21px;
+          20px
+          22px;
       }
 
       .logo {
-        font-size: 9px;
-        letter-spacing: 0.35em;
+        font-size: 10px;
+        letter-spacing: 0.28em;
       }
 
-      .logo-mark {
-        width: 19px;
-        height: 19px;
+      .logo-symbol {
+        width: 21px;
+        height: 21px;
       }
 
-      .logo-mark::before {
+      .logo-symbol::before {
         height: 27px;
         left: 9px;
-        top: -5px;
+        top: -4px;
       }
 
-      .logo-mark::after {
+      .logo-symbol::after {
         width: 27px;
+        left: -4px;
         top: 9px;
-        left: -5px;
       }
 
-      .status {
-        font-size: 7px;
+      .top-mark {
+        width: 8px;
+        height: 8px;
       }
 
 
-      /* -----------------------------------------
-         Hero
-         ----------------------------------------- */
+      /* Mobile grid */
+
+      .grid {
+        opacity: 0.3;
+
+        background-image:
+          linear-gradient(
+            90deg,
+            transparent 0,
+            transparent calc(33.33% - 1px),
+            var(--grid) 33.33%,
+            transparent calc(33.33% + 1px)
+          ),
+          linear-gradient(
+            90deg,
+            transparent 0,
+            transparent calc(66.66% - 1px),
+            var(--grid) 66.66%,
+            transparent calc(66.66% + 1px)
+          );
+      }
+
+
+      /* Main layout */
 
       .hero {
         display: block;
 
+        height: 100%;
+
         padding:
-          92px 22px
-          calc(65px + env(safe-area-inset-bottom));
+          92px
+          22px
+          72px;
       }
 
 
-      /* -----------------------------------------
-         Copy
-         ----------------------------------------- */
+      /* Text */
 
       .copy {
         position: relative;
-        z-index: 20;
+        z-index: 30;
 
-        max-width: 100%;
+        max-width: none;
 
-        padding-top: 8vh;
+        padding-top: 6vh;
       }
 
-      .eyebrow {
-        margin-bottom: 22px;
+      .marker {
+        margin-bottom: 19px;
 
         font-size: 8px;
 
-        letter-spacing: 0.18em;
+        gap: 8px;
       }
 
-      .eyebrow::before {
-        width: 21px;
+      .marker-line {
+        width: 22px;
       }
 
       h1 {
-        max-width: 100%;
-
         font-size:
           clamp(
-            42px,
-            11.7vw,
-            58px
+            43px,
+            12.3vw,
+            61px
           );
 
-        line-height: 0.98;
+        line-height: 0.92;
 
-        letter-spacing: -0.055em;
+        letter-spacing: -0.062em;
       }
 
-      .statement {
-        margin-top: 30px;
-
-        gap: 12px;
-
-        max-width: 310px;
+      .headline-line {
+        padding-bottom: 0.045em;
       }
 
-      .statement-line {
-        width: 20px;
+      .subcopy {
+        grid-template-columns: 24px minmax(0, 300px);
 
-        margin-top: 7px;
+        gap: 10px;
+
+        margin-top: 28px;
+        margin-left: 0;
       }
 
-      .statement p {
-        font-size: 10px;
+      .subcopy-line {
+        width: 22px;
 
-        line-height: 1.7;
+        margin-top: 8px;
       }
 
+      .subcopy p {
+        font-size: 10.5px;
 
-      /* -----------------------------------------
-         Architecture
-         ----------------------------------------- */
-
-      .architecture {
-        z-index: 4;
-
-        width: 118vw;
-        height: 118vw;
-
-        top: auto;
-        right: -38vw;
-        bottom: -9vw;
-
-        transform: none;
-
-        opacity: 0.85;
-      }
-
-      .architecture-inner {
-        transform:
-          translate3d(
-            calc(var(--mx, 0px) * 0.15),
-            calc(var(--my, 0px) * 0.15),
-            0
-          );
-      }
-
-      .coordinate {
-        font-size: 6px;
+        line-height: 1.65;
       }
 
 
-      /* -----------------------------------------
-         Footer
-         ----------------------------------------- */
+      /* Mobile visual */
 
-      .footer {
-        left: 21px;
-        right: 21px;
+      .visual {
+        position: absolute;
+
+        z-index: 5;
+
+        width: 88vw;
+        height: 88vw;
+
+        min-height: 0;
+
+        right: -25vw;
+        bottom: 4vh;
+
+        opacity: 0.92;
+
+        pointer-events: none;
+      }
+
+      .visual-stage {
+        width: 100%;
+      }
+
+      .material {
+        width: 72%;
+        height: 72%;
+
+        left: 14%;
+        top: 14%;
+      }
+
+      .red-form {
+        width: 40%;
+        height: 34%;
+      }
+
+      .void {
+        width: 27%;
+        height: 27%;
+      }
+
+      .crosshair {
+        width: 34px;
+        height: 34px;
+
+        right: 4%;
+        top: 3%;
+      }
+
+      .node {
+        width: 10px;
+        height: 10px;
+      }
+
+
+      /* Bottom */
+
+      .bottom {
+        left: 22px;
+        right: 22px;
 
         bottom:
           calc(
-            18px +
-            env(safe-area-inset-bottom)
+            17px + env(safe-area-inset-bottom)
           );
-
-        font-size: 7px;
       }
 
-      .footer-brand {
+      .bottom-rule {
+        width: 20px;
+      }
+
+      .wordmark {
         font-size: 9px;
+
+        letter-spacing: 0.4em;
       }
 
     }
 
 
     /* =========================================================
-       SMALL MOBILE
+       25. SMALL PHONES
        ========================================================= */
 
     @media (
       max-width: 380px
     ) {
 
+      .hero {
+        padding-top: 86px;
+      }
+
       .copy {
-        padding-top: 5vh;
+        padding-top: 3vh;
+      }
+
+      h1 {
+        font-size: 40px;
+      }
+
+      .subcopy {
+        margin-top: 23px;
+      }
+
+      .visual {
+        width: 77vw;
+        height: 77vw;
+
+        right: -17vw;
+        bottom: 3vh;
+      }
+
+    }
+
+
+    /* =========================================================
+       26. SHORT SCREENS
+       ========================================================= */
+
+    @media (
+      max-height: 700px
+    ) and (max-width: 700px) {
+
+      .hero {
+        padding-top: 80px;
+      }
+
+      .copy {
+        padding-top: 0;
       }
 
       h1 {
         font-size: 39px;
       }
 
-      .statement {
-        margin-top: 24px;
+      .subcopy {
+        margin-top: 19px;
       }
 
-      .architecture {
-        width: 105vw;
-        height: 105vw;
+      .visual {
+        width: 66vw;
+        height: 66vw;
 
-        right: -29vw;
-        bottom: -6vw;
-      }
-
-    }
-
-
-    /* =========================================================
-       SHORT MOBILE
-       ========================================================= */
-
-    @media (
-      max-width: 700px
-    ) and (
-      max-height: 700px
-    ) {
-
-      .copy {
-        padding-top: 2vh;
-      }
-
-      h1 {
-        font-size: 38px;
-      }
-
-      .statement {
-        margin-top: 20px;
-      }
-
-      .architecture {
-        width: 92vw;
-        height: 92vw;
-
-        right: -22vw;
-        bottom: -3vw;
+        right: -12vw;
+        bottom: 3vh;
       }
 
     }
 
 
     /* =========================================================
-       REDUCED MOTION
+       27. REDUCED MOTION
        ========================================================= */
 
     @media (
@@ -1439,6 +1530,8 @@
         animation-delay: 0ms !important;
         animation-iteration-count: 1 !important;
 
+        scroll-behavior: auto !important;
+
         transition-duration: 0.01ms !important;
       }
 
@@ -1447,25 +1540,29 @@
       }
 
       .copy,
-      .footer {
+      .visual,
+      .bottom {
         opacity: 1;
+
         transform: none;
       }
 
-      .line span {
+      .headline-inner {
         transform: none;
       }
 
-      .highlight::after {
+      .accent::after {
         transform: scaleX(1);
       }
 
     }
+
   </style>
 </head>
 
 
 <body>
+
 
   <!-- =======================================================
        INTRO
@@ -1475,9 +1572,9 @@
     class="intro"
     aria-hidden="true"
   >
-    <div class="intro-inner">
-      <span class="intro-line"></span>
-      <span>ARKVOID / INITIALIZING</span>
+    <div class="intro-content">
+      <span class="intro-dot"></span>
+      <span>ARKVOID</span>
     </div>
   </div>
 
@@ -1488,15 +1585,13 @@
 
   <main class="page">
 
-    <div class="atmosphere"></div>
-
     <div
-      class="grid"
+      class="grain"
       aria-hidden="true"
     ></div>
 
     <div
-      class="grain"
+      class="grid"
       aria-hidden="true"
     ></div>
 
@@ -1505,12 +1600,12 @@
          HEADER
          ===================================================== -->
 
-    <header class="header">
+    <header class="top">
 
       <div class="logo">
 
         <span
-          class="logo-mark"
+          class="logo-symbol"
           aria-hidden="true"
         ></span>
 
@@ -1518,51 +1613,53 @@
 
       </div>
 
-
-      <div class="status">
-
-        <span
-          class="status-dot"
-          aria-hidden="true"
-        ></span>
-
-        <span>Constructing</span>
-
-      </div>
+      <span
+        class="top-mark"
+        aria-hidden="true"
+      ></span>
 
     </header>
 
 
     <!-- =====================================================
-         HERO COPY
+         HERO
          ===================================================== -->
 
     <section class="hero">
 
+
+      <!-- ===================================================
+           COPY
+           =================================================== -->
+
       <div class="copy">
 
-        <div class="eyebrow">
-          Technology / AI / Beyond
+        <div class="marker">
+
+          <span class="marker-line"></span>
+
+          <span>Technology / AI / Beyond</span>
+
         </div>
 
 
         <h1>
 
-          <span class="line">
-            <span>
+          <span class="headline-line">
+            <span class="headline-inner">
               The next
             </span>
           </span>
 
-          <span class="line">
-            <span>
+          <span class="headline-line">
+            <span class="headline-inner">
               layer of
             </span>
           </span>
 
-          <span class="line">
-            <span>
-              <span class="highlight">
+          <span class="headline-line">
+            <span class="headline-inner">
+              <span class="accent">
                 technology
               </span>
               is still unnamed.
@@ -1572,10 +1669,10 @@
         </h1>
 
 
-        <div class="statement">
+        <div class="subcopy">
 
           <span
-            class="statement-line"
+            class="subcopy-line"
             aria-hidden="true"
           ></span>
 
@@ -1589,59 +1686,57 @@
 
 
       <!-- ===================================================
-           ARCHITECTURAL VISUAL
+           VISUAL
            =================================================== -->
 
       <div
-        class="architecture"
+        class="visual"
         aria-hidden="true"
       >
 
-        <div class="architecture-inner">
+        <div class="visual-stage">
 
 
-          <!-- Construction geometry -->
+          <!-- Main material -->
 
-          <div class="construction"></div>
+          <div class="material">
 
+            <div class="topography"></div>
 
-          <!-- Large rings -->
+            <div class="material-light"></div>
 
-          <div class="ring one"></div>
-          <div class="ring two"></div>
-          <div class="ring three"></div>
-
-
-          <!-- Architectural planes -->
-
-          <div class="plane one"></div>
-          <div class="plane two"></div>
-          <div class="plane three"></div>
+          </div>
 
 
-          <!-- Central structure -->
+          <!-- Red structural layer -->
 
-          <div class="core"></div>
-
-
-          <!-- Scanning light -->
-
-          <div class="scan"></div>
+          <div class="red-form"></div>
 
 
-          <!-- Technical coordinates -->
+          <!-- Orbital system -->
 
-          <span class="coordinate a">
-            AX / 001
-          </span>
+          <div class="orbit"></div>
 
-          <span class="coordinate b">
-            SYS / 04
-          </span>
+          <div class="orbit orbit--second"></div>
 
-          <span class="coordinate c">
-            00.01 / FORMING
-          </span>
+
+          <!-- Central void -->
+
+          <div class="void"></div>
+
+
+          <!-- Crosshair -->
+
+          <div class="crosshair">
+
+            <div class="crosshair-ring"></div>
+
+          </div>
+
+
+          <!-- Small active node -->
+
+          <div class="node"></div>
 
         </div>
 
@@ -1651,49 +1746,48 @@
 
 
     <!-- =====================================================
-         FOOTER
+         FOOTER SIGNATURE
          ===================================================== -->
 
-    <footer class="footer">
+    <footer class="bottom">
 
-      <span>
-        NEXT / UNKNOWN
-      </span>
+      <span
+        class="bottom-rule"
+        aria-hidden="true"
+      ></span>
 
-      <span class="footer-brand">
+      <span class="wordmark">
         ARKVOID
-      </span>
-
-      <span>
-        2026
       </span>
 
     </footer>
 
+
   </main>
 
 
-  <!-- =======================================================
-       INTERACTION
-       ======================================================= -->
-
   <script>
+    /* =========================================================
+       ARKVOID INTERACTION
+       Lightweight pointer depth.
+       No animation library.
+       No continuous RAF loop.
+       ========================================================= */
+
     (() => {
 
-      const architecture =
-        document.querySelector(
-          ".architecture-inner"
-        );
+      const stage =
+        document.querySelector(".visual-stage");
 
-      if (!architecture) return;
+      if (!stage) return;
 
 
       const desktop =
         window.matchMedia(
-          "(min-width: 701px)"
+          "(min-width: 901px)"
         );
 
-      const reduced =
+      const reducedMotion =
         window.matchMedia(
           "(prefers-reduced-motion: reduce)"
         );
@@ -1701,49 +1795,16 @@
 
       if (
         !desktop.matches ||
-        reduced.matches
+        reducedMotion.matches
       ) {
         return;
       }
 
 
-      let targetX = 0;
-      let targetY = 0;
-
-      let currentX = 0;
-      let currentY = 0;
-
-      let animationFrame = null;
+      let resetTimer = null;
 
 
-      function render() {
-
-        currentX +=
-          (targetX - currentX) * 0.045;
-
-        currentY +=
-          (targetY - currentY) * 0.045;
-
-
-        architecture.style.setProperty(
-          "--mx",
-          `${currentX}px`
-        );
-
-        architecture.style.setProperty(
-          "--my",
-          `${currentY}px`
-        );
-
-
-        animationFrame =
-          requestAnimationFrame(
-            render
-          );
-      }
-
-
-      function pointerMove(event) {
+      function move(event) {
 
         const x =
           event.clientX /
@@ -1756,42 +1817,74 @@
           0.5;
 
 
-        targetX =
+        /*
+          Keep movement intentionally tiny.
+          The design should feel physical,
+          not like a parallax demo.
+        */
+
+        const moveX =
           Math.max(
-            -18,
+            -9,
             Math.min(
-              18,
-              x * 36
+              9,
+              x * 18
             )
           );
 
-        targetY =
+        const moveY =
           Math.max(
-            -18,
+            -9,
             Math.min(
-              18,
-              y * 36
+              9,
+              y * 18
             )
           );
 
 
-        if (!animationFrame) {
-          animationFrame =
-            requestAnimationFrame(
-              render
+        stage.style.setProperty(
+          "--pointer-x",
+          moveX
+        );
+
+        stage.style.setProperty(
+          "--pointer-y",
+          moveY
+        );
+
+
+        clearTimeout(resetTimer);
+
+        resetTimer =
+          setTimeout(() => {
+
+            stage.style.setProperty(
+              "--pointer-x",
+              0
             );
-        }
+
+            stage.style.setProperty(
+              "--pointer-y",
+              0
+            );
+
+          }, 1200);
       }
 
 
       window.addEventListener(
         "pointermove",
-        pointerMove,
+        move,
         {
           passive: true
         }
       );
 
+
+      /*
+        If the browser becomes hidden,
+        return the visual to neutral.
+      */
 
       document.addEventListener(
         "visibilitychange",
@@ -1801,8 +1894,15 @@
             document.hidden
           ) {
 
-            targetX = 0;
-            targetY = 0;
+            stage.style.setProperty(
+              "--pointer-x",
+              0
+            );
+
+            stage.style.setProperty(
+              "--pointer-y",
+              0
+            );
 
           }
 
@@ -1811,6 +1911,7 @@
 
     })();
   </script>
+
 
 </body>
 </html>
